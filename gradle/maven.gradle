@@ -34,14 +34,14 @@ publishing {
                 name = 'test'
                 description = 'An Minecraft mod that add falling leaves to trees'
                 scm {
-                    url = 'https://github.com/Cheaterpaul/ElytraAutoFlight'
-                    connection = 'scm:git:git://github.com/Cheaterpaul/ElytraAutoFlight.git'
-                    developerConnection = 'scm:git:git@github.com:Cheaterpaul/ElytraAutoFlight.git'
+                    url = 'https://github.com/Cheaterpaul/AutoElytraFlight'
+                    connection = 'scm:git:git://github.com/Cheaterpaul/AutoElytraFlight.git'
+                    developerConnection = 'scm:git:git@github.com:Cheaterpaul/AutoElytraFlight.git'
                 }
 
                 issueManagement {
                     system = 'github'
-                    url = 'https://github.com/Cheaterpaul/ElytraAutoFlight/issues'
+                    url = 'https://github.com/Cheaterpaul/AutoElytraFlight/issues'
                 }
 
                 developers {

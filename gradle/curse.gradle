@@ -6,7 +6,7 @@ curseforge {
         apiKey = "DUMMY"
     }
     project {
-        id = project.curse_forge_id
+        id = project.curseforge_id
 
         if (project.type == "beta") {
             releaseType = 'beta'
