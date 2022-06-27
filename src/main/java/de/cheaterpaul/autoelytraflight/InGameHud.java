@@ -1,4 +1,4 @@
-package de.cheaterpaul.elytraautoflight;
+package de.cheaterpaul.autoelytraflight;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;

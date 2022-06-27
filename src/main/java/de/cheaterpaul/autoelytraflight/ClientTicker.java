@@ -1,4 +1,4 @@
-package de.cheaterpaul.elytraautoflight;
+package de.cheaterpaul.autoelytraflight;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -30,14 +30,14 @@ public class ClientTicker {
     public String[] hudString;
 
 
-    private Minecraft mc;
+    private final Minecraft mc;
 
     private static KeyBinding keyBinding;
 
     public LinkedList<GraphDataPoint> graph = new LinkedList<>();
 
     public static void registerKeyBinding(FMLClientSetupEvent event){
-        keyBinding = new KeyBinding("key.elytraautoflight.toggle", InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_R, "text.elytraautoflight.title");
+        keyBinding = new KeyBinding("autoelytraflighte", InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_R, "text.autoelytraflight.title");
         ClientRegistry.registerKeyBinding(keyBinding);
     }
 

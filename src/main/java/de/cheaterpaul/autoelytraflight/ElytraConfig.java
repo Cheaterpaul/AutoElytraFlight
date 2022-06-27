@@ -1,6 +1,5 @@
-package de.cheaterpaul.elytraautoflight;
+package de.cheaterpaul.autoelytraflight;
 
-import com.electronwill.nightconfig.core.ConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;

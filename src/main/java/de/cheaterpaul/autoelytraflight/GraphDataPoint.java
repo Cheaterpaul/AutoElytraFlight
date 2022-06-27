@@ -1,4 +1,4 @@
-package de.cheaterpaul.elytraautoflight;
+package de.cheaterpaul.autoelytraflight;
 import net.minecraft.util.math.vector.Vector3d;
 
 public class GraphDataPoint {
