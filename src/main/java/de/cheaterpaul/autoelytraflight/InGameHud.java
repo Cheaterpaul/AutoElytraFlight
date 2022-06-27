@@ -1,12 +1,9 @@
 package de.cheaterpaul.autoelytraflight;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -22,7 +19,7 @@ public class InGameHud {
 
 	@SubscribeEvent
 	public void renderPost(RenderGameOverlayEvent.Post event) {
-		MatrixStack  matrixStack = event.getMatrixStack();
+		PoseStack matrixStack = event.getMatrixStack();
 			if (ticker.showHud) {
 
 				if (ticker.hudString != null) {
@@ -38,7 +35,7 @@ public class InGameHud {
 
 				if (ElytraConfig.CONFIG.showGraph.get()) {
 
-					AbstractGui.fill(matrixStack, ElytraConfig.CONFIG.guiX.get(), ElytraConfig.CONFIG.guiY.get(), ElytraConfig.CONFIG.guiX.get() + ElytraConfig.CONFIG.guiWidth.get(), ElytraConfig.CONFIG.guiY.get() + ElytraConfig.CONFIG.guiHeight.get(), 0x22FFFFFF);
+					GuiComponent.fill(matrixStack, ElytraConfig.CONFIG.guiX.get(), ElytraConfig.CONFIG.guiY.get(), ElytraConfig.CONFIG.guiX.get() + ElytraConfig.CONFIG.guiWidth.get(), ElytraConfig.CONFIG.guiY.get() + ElytraConfig.CONFIG.guiHeight.get(), 0x22FFFFFF);
 
 					double maxAltitude = 0;
 					double minAltitude = 999;
@@ -95,7 +92,7 @@ public class InGameHud {
 			}
 	}
 
-	private Tessellator tessellator_1;
+	private Tesselator tessellator_1;
 	private BufferBuilder bufferBuilder_1;
 	private void beginDrawLine(int color)
 	{
@@ -104,22 +101,22 @@ public class InGameHud {
 		float float_3 = (float)(color >> 8 & 255) / 255.0F;
 		float float_4 = (float)(color & 255) / 255.0F;
 
-		tessellator_1 = Tessellator.getInstance();
+		tessellator_1 = Tesselator.getInstance();
 		bufferBuilder_1 = tessellator_1.getBuilder();
 		RenderSystem.enableBlend();
 		RenderSystem.disableTexture();
-		RenderSystem.color4f(float_2, float_3, float_4, float_1);
-		bufferBuilder_1.begin(3, DefaultVertexFormats.POSITION);
+		RenderSystem.setShaderColor(float_2, float_3, float_4, float_1);
+		bufferBuilder_1.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
 	}
 
 	private void beginDrawLineColor()
 	{
-		tessellator_1 = Tessellator.getInstance();
+		tessellator_1 = Tesselator.getInstance();
 		bufferBuilder_1 = tessellator_1.getBuilder();
 		RenderSystem.enableBlend();
 		RenderSystem.disableTexture();
-		RenderSystem.blendColor(1, 1, 1, 1);
-		bufferBuilder_1.begin(3, DefaultVertexFormats.POSITION_COLOR);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		bufferBuilder_1.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
 	}
 
 	private void addLinePoint(double x, double y, double z)

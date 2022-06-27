@@ -1,21 +1,22 @@
 package de.cheaterpaul.autoelytraflight;
-import net.minecraft.util.math.vector.Vector3d;
+
+import net.minecraft.world.phys.Vec3;
 
 public class GraphDataPoint {
-    public Vector3d realPosition;
+    public Vec3 realPosition;
     public double horizontalDelta;
     public double velocity;
     public boolean pullUp;
     public boolean pullDown;
 
-    public GraphDataPoint(Vector3d realPosition) {
+    public GraphDataPoint(Vec3 realPosition) {
         this.realPosition = realPosition;
     }
 
-    public GraphDataPoint(Vector3d realPosition, Vector3d previousPosition) {
+    public GraphDataPoint(Vec3 realPosition, Vec3 previousPosition) {
         this.realPosition = realPosition;
 
-        Vector3d delta = new Vector3d(realPosition.x - previousPosition.x, 0, realPosition.z - previousPosition.z);
+        Vec3 delta = new Vec3(realPosition.x - previousPosition.x, 0, realPosition.z - previousPosition.z);
         this.horizontalDelta = delta.length();
 
     }

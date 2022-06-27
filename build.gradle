@@ -5,7 +5,7 @@ buildscript {
         maven {url='https://repo.spongepowered.org/repository/maven-public'}
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1+', changing: true
     }
 }
 plugins {
@@ -18,7 +18,7 @@ apply plugin: 'maven-publish'
 
 version = '1.0'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 ext.mod_version="Test"
 ext.type="test"
@@ -78,7 +78,7 @@ jar {
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
 def intoTargets = ["$rootDir/out/production/resources/", "$rootDir/out/production/${project.name}.main/", "$rootDir/bin/main/"]
-def replaceProperties = ['version': project.mod_version, 'mcversion': minecraft_version, 'forge_version': forge_version]
+def replaceProperties = ['version': project.mod_version, 'minecraft_version': minecraft_version, 'forge_version': forge_version]
 processResources {
     inputs.properties replaceProperties
     replaceProperties.put 'project', project

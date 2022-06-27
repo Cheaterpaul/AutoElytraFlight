@@ -1,12 +1,12 @@
 package de.cheaterpaul.autoelytraflight;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.lwjgl.glfw.GLFW;
 
@@ -16,7 +16,7 @@ public class ClientTicker {
 
     private boolean autoFlight;
 
-    private Vector3d previousPosition;
+    private Vec3 previousPosition;
     private double currentVelocity;
 
     public boolean isDescending;
@@ -32,12 +32,12 @@ public class ClientTicker {
 
     private final Minecraft mc;
 
-    private static KeyBinding keyBinding;
+    private static KeyMapping keyBinding;
 
     public LinkedList<GraphDataPoint> graph = new LinkedList<>();
 
     public static void registerKeyBinding(FMLClientSetupEvent event){
-        keyBinding = new KeyBinding("autoelytraflighte", InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_R, "text.autoelytraflight.title");
+        keyBinding = new KeyMapping("key.autoelytraflight.toggle", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, "text.autoelytraflight.title");
         ClientRegistry.registerKeyBinding(keyBinding);
     }
 
@@ -90,17 +90,17 @@ public class ClientTicker {
                 }
 
                 if (pullUp) {
-                    mc.player.xRot -= ElytraConfig.CONFIG.pullUpSpeed.get();
+                    mc.player.setXRot((float) (mc.player.getXRot()- ElytraConfig.CONFIG.pullUpSpeed.get()));
 
-                    if (mc.player.xRot <= ElytraConfig.CONFIG.pullUpAngle.get())
-                        mc.player.xRot = ElytraConfig.CONFIG.pullUpAngle.get().floatValue();
+                    if (mc.player.getXRot() <= ElytraConfig.CONFIG.pullUpAngle.get())
+                        mc.player.setXRot(ElytraConfig.CONFIG.pullUpAngle.get().floatValue());
                 }
 
                 if (pullDown) {
-                    mc.player.xRot += ElytraConfig.CONFIG.pullDownSpeed.get();
+                    mc.player.setXRot((float) (mc.player.getXRot() + ElytraConfig.CONFIG.pullDownSpeed.get()));
 
-                    if (mc.player.xRot >= ElytraConfig.CONFIG.pullDownAngle.get())
-                        mc.player.xRot = ElytraConfig.CONFIG.pullDownAngle.get().floatValue();
+                    if (mc.player.getXRot() >= ElytraConfig.CONFIG.pullDownAngle.get())
+                        mc.player.setXRot(ElytraConfig.CONFIG.pullDownAngle.get().floatValue());
                 }
             } else {
                 pullUp = false;
@@ -156,12 +156,12 @@ public class ClientTicker {
 
     private void computeVelocity()
     {
-        Vector3d newPosition = mc.player.position();
+        Vec3 newPosition = mc.player.position();
 
         if (previousPosition == null)
             previousPosition = newPosition;
 
-        Vector3d difference = new Vector3d(newPosition.x - previousPosition.x, newPosition.y - previousPosition.y, newPosition.z - previousPosition.z);
+        Vec3 difference = new Vec3(newPosition.x - previousPosition.x, newPosition.y - previousPosition.y, newPosition.z - previousPosition.z);
 
         previousPosition = newPosition;
 

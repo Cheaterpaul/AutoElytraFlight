@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[36,)"
+loaderVersion="[40,)"
 license="GPL-3.0"
 issueTrackerURL = "https://github.com/Cheaterpaul/AutoElytraFlight/issues"
 [[mods]]
@@ -14,12 +14,12 @@ This mod will fly your elytra wings for you, and will gain altitude without the 
 [[dependencies.autoelytraflight]]
     modId="forge"
     mandatory=true
-    versionRange="[36,)"
+    versionRange="[${forge_version},)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.autoelytraflight]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.5,1.17)"
+    versionRange="[${minecraft_version},)"
     ordering="NONE"
     side="BOTH"
