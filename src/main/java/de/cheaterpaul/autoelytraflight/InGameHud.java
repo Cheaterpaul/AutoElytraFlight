@@ -1,11 +1,14 @@
 package de.cheaterpaul.autoelytraflight;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.lwjgl.opengl.GL14C;
 
 public class InGameHud {
 
@@ -105,18 +108,21 @@ public class InGameHud {
 		bufferBuilder_1 = tessellator_1.getBuilder();
 		RenderSystem.enableBlend();
 		RenderSystem.disableTexture();
+		RenderSystem.lineWidth(1.0F);
 		RenderSystem.setShaderColor(float_2, float_3, float_4, float_1);
-		bufferBuilder_1.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+		bufferBuilder_1.begin(VertexFormat.Mode.DEBUG_LINE_STRIP, DefaultVertexFormat.POSITION);
 	}
 
 	private void beginDrawLineColor()
 	{
+		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 		tessellator_1 = Tesselator.getInstance();
 		bufferBuilder_1 = tessellator_1.getBuilder();
 		RenderSystem.enableBlend();
+		RenderSystem.lineWidth(1.0F);
 		RenderSystem.disableTexture();
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		bufferBuilder_1.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
+		RenderSystem.setShaderFogColor(1,1,1,1);
+		bufferBuilder_1.begin(VertexFormat.Mode.DEBUG_LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
 	}
 
 	private void addLinePoint(double x, double y, double z)
@@ -126,7 +132,7 @@ public class InGameHud {
 
 	private void addLinePointColor(double x, double y, double z, float a, float r, float g, float b)
 	{
-		bufferBuilder_1.vertex(x, y, z).color(r, g, b, a).endVertex();
+		bufferBuilder_1.vertex(x, y, z).color(r,g,b,a).endVertex();
 	}
 
 	private void endDrawLine()
