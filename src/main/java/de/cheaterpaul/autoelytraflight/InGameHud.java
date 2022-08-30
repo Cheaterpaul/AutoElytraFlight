@@ -1,28 +1,33 @@
 package de.cheaterpaul.autoelytraflight;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.lwjgl.opengl.GL14C;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import net.minecraftforge.common.MinecraftForge;
 
-public class InGameHud {
+public class InGameHud implements IGuiOverlay {
 
 	private final Minecraft minecraftClient;
 	private final ClientTicker ticker;
+
+	public static void registerOverlay(RegisterGuiOverlaysEvent event) {
+		ClientTicker clientTicker = new ClientTicker();
+		MinecraftForge.EVENT_BUS.register(clientTicker);
+		event.registerAboveAll("elytra-statistics", new InGameHud(clientTicker));
+	}
 
 	public InGameHud(ClientTicker ticker) {
 		this.ticker = ticker;
 		this.minecraftClient = Minecraft.getInstance();
 	}
 
-	@SubscribeEvent
-	public void renderPost(RenderGameOverlayEvent.Post event) {
-		PoseStack matrixStack = event.getMatrixStack();
+	@Override
+	public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int screenWidth, int screenHeight) {
 			if (ticker.showHud) {
 
 				if (ticker.hudString != null) {
@@ -30,7 +35,7 @@ public class InGameHud {
 					float stringY = ElytraConfig.CONFIG.guiY.get() + ElytraConfig.CONFIG.guiHeight.get() + 2;
 
 					for (int i = 0; i < ticker.hudString.length; i++) {
-						minecraftClient.font.drawShadow(matrixStack, ticker.hudString[i], stringX, stringY, 0xFFFFFF);
+						minecraftClient.font.drawShadow(poseStack, ticker.hudString[i], stringX, stringY, 0xFFFFFF);
 						stringY += minecraftClient.font.lineHeight + 1;
 
 					}
@@ -38,7 +43,7 @@ public class InGameHud {
 
 				if (ElytraConfig.CONFIG.showGraph.get()) {
 
-					GuiComponent.fill(matrixStack, ElytraConfig.CONFIG.guiX.get(), ElytraConfig.CONFIG.guiY.get(), ElytraConfig.CONFIG.guiX.get() + ElytraConfig.CONFIG.guiWidth.get(), ElytraConfig.CONFIG.guiY.get() + ElytraConfig.CONFIG.guiHeight.get(), 0x22FFFFFF);
+					GuiComponent.fill(poseStack, ElytraConfig.CONFIG.guiX.get(), ElytraConfig.CONFIG.guiY.get(), ElytraConfig.CONFIG.guiX.get() + ElytraConfig.CONFIG.guiWidth.get(), ElytraConfig.CONFIG.guiY.get() + ElytraConfig.CONFIG.guiHeight.get(), 0x22FFFFFF);
 
 					double maxAltitude = 0;
 					double minAltitude = 999;

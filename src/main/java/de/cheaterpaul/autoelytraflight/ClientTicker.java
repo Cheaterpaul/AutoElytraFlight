@@ -4,10 +4,9 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.ClientRegistry;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.LinkedList;
@@ -32,13 +31,12 @@ public class ClientTicker {
 
     private final Minecraft mc;
 
-    private static KeyMapping keyBinding;
+    private static final KeyMapping keyBinding = new KeyMapping("key.autoelytraflight.toggle", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, "text.autoelytraflight.title");
 
     public LinkedList<GraphDataPoint> graph = new LinkedList<>();
 
-    public static void registerKeyBinding(FMLClientSetupEvent event){
-        keyBinding = new KeyMapping("key.autoelytraflight.toggle", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, "text.autoelytraflight.title");
-        ClientRegistry.registerKeyBinding(keyBinding);
+    public static void registerKeyBinding(RegisterKeyMappingsEvent event){
+        event.register(keyBinding);
     }
 
     public ClientTicker() {
