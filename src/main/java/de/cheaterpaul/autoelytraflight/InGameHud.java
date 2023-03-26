@@ -112,7 +112,6 @@ public class InGameHud implements IGuiOverlay {
 		tessellator_1 = Tesselator.getInstance();
 		bufferBuilder_1 = tessellator_1.getBuilder();
 		RenderSystem.enableBlend();
-		RenderSystem.disableTexture();
 		RenderSystem.lineWidth(1.0F);
 		RenderSystem.setShaderColor(float_2, float_3, float_4, float_1);
 		bufferBuilder_1.begin(VertexFormat.Mode.DEBUG_LINE_STRIP, DefaultVertexFormat.POSITION);
@@ -125,7 +124,6 @@ public class InGameHud implements IGuiOverlay {
 		bufferBuilder_1 = tessellator_1.getBuilder();
 		RenderSystem.enableBlend();
 		RenderSystem.lineWidth(1.0F);
-		RenderSystem.disableTexture();
 		RenderSystem.setShaderFogColor(1,1,1,1);
 		bufferBuilder_1.begin(VertexFormat.Mode.DEBUG_LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
 	}
@@ -143,7 +141,6 @@ public class InGameHud implements IGuiOverlay {
 	private void endDrawLine()
 	{
 		tessellator_1.end();
-		RenderSystem.enableTexture();
 		RenderSystem.disableBlend();
 	}
 
