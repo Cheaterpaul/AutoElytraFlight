@@ -1,9 +1,12 @@
 package de.cheaterpaul.autoelytraflight;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
@@ -27,7 +30,7 @@ public class InGameHud implements IGuiOverlay {
 	}
 
 	@Override
-	public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int screenWidth, int screenHeight) {
+	public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
 			if (ticker.showHud) {
 
 				if (ticker.hudString != null) {
@@ -35,7 +38,7 @@ public class InGameHud implements IGuiOverlay {
 					float stringY = ElytraConfig.CONFIG.guiY.get() + ElytraConfig.CONFIG.guiHeight.get() + 2;
 
 					for (int i = 0; i < ticker.hudString.length; i++) {
-						minecraftClient.font.drawShadow(poseStack, ticker.hudString[i], stringX, stringY, 0xFFFFFF);
+						guiGraphics.drawString(minecraftClient.font, ticker.hudString[i], stringX, stringY, 0xFFFFFF, true);
 						stringY += minecraftClient.font.lineHeight + 1;
 
 					}
@@ -43,7 +46,7 @@ public class InGameHud implements IGuiOverlay {
 
 				if (ElytraConfig.CONFIG.showGraph.get()) {
 
-					GuiComponent.fill(poseStack, ElytraConfig.CONFIG.guiX.get(), ElytraConfig.CONFIG.guiY.get(), ElytraConfig.CONFIG.guiX.get() + ElytraConfig.CONFIG.guiWidth.get(), ElytraConfig.CONFIG.guiY.get() + ElytraConfig.CONFIG.guiHeight.get(), 0x22FFFFFF);
+					guiGraphics.fill(ElytraConfig.CONFIG.guiX.get(), ElytraConfig.CONFIG.guiY.get(), ElytraConfig.CONFIG.guiX.get() + ElytraConfig.CONFIG.guiWidth.get(), ElytraConfig.CONFIG.guiY.get() + ElytraConfig.CONFIG.guiHeight.get(), 0x22FFFFFF);
 
 					double maxAltitude = 0;
 					double minAltitude = 999;
