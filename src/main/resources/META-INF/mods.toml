@@ -1,25 +1,23 @@
 modLoader="javafml"
-loaderVersion="[46,)"
-license="GPL-3.0"
-issueTrackerURL = "https://github.com/Cheaterpaul/AutoElytraFlight/issues"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="${mod_issue_tracker_url}"
 [[mods]]
-modId="autoelytraflight"
-version="${version}"
-displayName="Auto Flight Elytra"
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
 logoFile="logo.png"
-authors="Cheaterpaul"
-description='''
-This mod will fly your elytra wings for you, and will gain altitude without the use of fireworks.
-'''
-[[dependencies.autoelytraflight]]
+authors="${mod_authors}"
+description='''${mod_description}'''
+[[dependencies.${mod_id}]]
     modId="forge"
     mandatory=true
-    versionRange="[${forge_version},)"
+    versionRange="${forge_version_range}"
     ordering="NONE"
     side="BOTH"
-[[dependencies.autoelytraflight]]
+[[dependencies.${mod_id}]]
     modId="minecraft"
     mandatory=true
-    versionRange="[${minecraft_version},)"
+    versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
