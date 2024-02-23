@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
 import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
@@ -21,7 +22,7 @@ public class InGameHud implements IGuiOverlay {
 	public static void registerOverlay(RegisterGuiOverlaysEvent event) {
 		ClientTicker clientTicker = new ClientTicker();
 		NeoForge.EVENT_BUS.register(clientTicker);
-		event.registerAboveAll("elytra-statistics", new InGameHud(clientTicker));
+		event.registerAboveAll(new ResourceLocation("autoelytraflight","elytra-statistics"), new InGameHud(clientTicker));
 	}
 
 	public InGameHud(ClientTicker ticker) {
