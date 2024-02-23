@@ -21,7 +21,7 @@ publishMods {
     type = project.type == "beta" ? BETA: project.type == "release" ? STABLE : ALPHA
     changelog = type != ALPHA ? "" : "This version should not be used in your 'productive' world. It contains the latest features, but also the latest bugs.\n Probably not all features are finished.\n To see what might have changed browse the latest commits."
     file = jar.archiveFile
-    modLoaders.add("forge")
+    modLoaders.add("neoforge")
     version = "${project.minecraft_version}-${project.mod_version}"
     displayName = "${archivesBaseName}-${project.minecraft_version}-${project.mod_version}"
     dryRun = !(project.hasProperty("MODRINTH_API") && project.hasProperty("CURSEFORGE_API"))
@@ -97,9 +97,6 @@ publishing {
 
             // Adds the javadocs as an artifact.
             artifact javadocJar
-
-            // Adds the deobfuscated jar as an artifact.
-            artifact deobfJar
 
         }
     }

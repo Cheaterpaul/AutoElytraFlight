@@ -20,15 +20,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     archiveClassifier = 'javadoc'
 }
 
-task deobfJar(type: Jar) {
-
-    description = 'Creates a JAR containing the non-obfuscated compiled code.'
-    from sourceSets.main.output
-    archiveClassifier = "deobf"
-}
-
 artifacts {
     archives sourcesJar
     archives javadocJar
-    archives deobfJar
 }

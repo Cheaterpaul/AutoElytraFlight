@@ -1,17 +1,18 @@
 package de.cheaterpaul.autoelytraflight;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
+
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class ElytraConfig {
 
     public static final ElytraConfig CONFIG;
-    private static final ForgeConfigSpec configSpec;
+    private static final ModConfigSpec configSpec;
 
     static {
-        final Pair<ElytraConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ElytraConfig::new);
+        final Pair<ElytraConfig, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(ElytraConfig::new);
         CONFIG = specPair.getKey();
         configSpec = specPair.getValue();
     }
@@ -20,21 +21,21 @@ public class ElytraConfig {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, configSpec);
     }
 
-    public ForgeConfigSpec.IntValue guiX;
-    public ForgeConfigSpec.IntValue guiY;
-    public ForgeConfigSpec.IntValue guiWidth;
-    public ForgeConfigSpec.IntValue guiHeight;
-    public ForgeConfigSpec.IntValue guiGraphRealWidth;
-    public ForgeConfigSpec.BooleanValue showGraph;
+    public ModConfigSpec.IntValue guiX;
+    public ModConfigSpec.IntValue guiY;
+    public ModConfigSpec.IntValue guiWidth;
+    public ModConfigSpec.IntValue guiHeight;
+    public ModConfigSpec.IntValue guiGraphRealWidth;
+    public ModConfigSpec.BooleanValue showGraph;
 
-    public ForgeConfigSpec.DoubleValue pullUpAngle;
-    public ForgeConfigSpec.DoubleValue pullDownAngle;
-    public ForgeConfigSpec.DoubleValue pullUpMinVelocity;
-    public ForgeConfigSpec.DoubleValue pullDownMaxVelocity;
-    public ForgeConfigSpec.DoubleValue pullUpSpeed;
-    public ForgeConfigSpec.DoubleValue pullDownSpeed;
+    public ModConfigSpec.DoubleValue pullUpAngle;
+    public ModConfigSpec.DoubleValue pullDownAngle;
+    public ModConfigSpec.DoubleValue pullUpMinVelocity;
+    public ModConfigSpec.DoubleValue pullDownMaxVelocity;
+    public ModConfigSpec.DoubleValue pullUpSpeed;
+    public ModConfigSpec.DoubleValue pullDownSpeed;
 
-    public ElytraConfig(ForgeConfigSpec.Builder builder) {
+    public ElytraConfig(ModConfigSpec.Builder builder) {
         builder.push("In-Flight Gui");
         this.guiX = builder.comment("Graph X").defineInRange("guiX", 5, 0, Integer.MAX_VALUE);
         this.guiY = builder.comment("Graph Y").defineInRange("guiY", 5, 0, Integer.MAX_VALUE);

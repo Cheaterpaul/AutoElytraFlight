@@ -8,10 +8,10 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
+import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
+import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
+import net.neoforged.neoforge.common.NeoForge;
 
 public class InGameHud implements IGuiOverlay {
 
@@ -20,7 +20,7 @@ public class InGameHud implements IGuiOverlay {
 
 	public static void registerOverlay(RegisterGuiOverlaysEvent event) {
 		ClientTicker clientTicker = new ClientTicker();
-		MinecraftForge.EVENT_BUS.register(clientTicker);
+		NeoForge.EVENT_BUS.register(clientTicker);
 		event.registerAboveAll("elytra-statistics", new InGameHud(clientTicker));
 	}
 
@@ -30,7 +30,7 @@ public class InGameHud implements IGuiOverlay {
 	}
 
 	@Override
-	public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
+	public void render(ExtendedGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
 			if (ticker.showHud) {
 
 				if (ticker.hudString != null) {
