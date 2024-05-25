@@ -1,25 +1,23 @@
 package de.cheaterpaul.autoelytraflight;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
-import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
-import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 
-public class InGameHud implements IGuiOverlay {
+public class InGameHud implements LayeredDraw.Layer {
 
 	private final Minecraft minecraftClient;
 	private final ClientTicker ticker;
 
-	public static void registerOverlay(RegisterGuiOverlaysEvent event) {
+	public static void registerOverlay(RegisterGuiLayersEvent event) {
 		ClientTicker clientTicker = new ClientTicker();
 		NeoForge.EVENT_BUS.register(clientTicker);
 		event.registerAboveAll(new ResourceLocation("autoelytraflight","elytra-statistics"), new InGameHud(clientTicker));
@@ -31,7 +29,7 @@ public class InGameHud implements IGuiOverlay {
 	}
 
 	@Override
-	public void render(ExtendedGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
+	public void render(GuiGraphics guiGraphics, float partialTicks) {
 			if (ticker.showHud) {
 
 				if (ticker.hudString != null) {
@@ -46,7 +44,8 @@ public class InGameHud implements IGuiOverlay {
 				}
 
 				if (ElytraConfig.CONFIG.showGraph.get()) {
-
+					PoseStack pose = guiGraphics.pose();
+					pose.pushPose();
 					guiGraphics.fill(ElytraConfig.CONFIG.guiX.get(), ElytraConfig.CONFIG.guiY.get(), ElytraConfig.CONFIG.guiX.get() + ElytraConfig.CONFIG.guiWidth.get(), ElytraConfig.CONFIG.guiY.get() + ElytraConfig.CONFIG.guiHeight.get(), 0x22FFFFFF);
 
 					double maxAltitude = 0;
@@ -57,11 +56,11 @@ public class InGameHud implements IGuiOverlay {
 					}
 
 					if (maxAltitude > 0) {
-
+						MultiBufferSource.BufferSource bufferSource = minecraftClient.renderBuffers().bufferSource();
 						maxAltitude += 5;
 						minAltitude -= 40;
 
-						beginDrawLineColor();
+						VertexConsumer consumer = beginDrawLineColor(bufferSource);
 
 						double currentX = 0;
 						double currentY;
@@ -82,70 +81,50 @@ public class InGameHud implements IGuiOverlay {
 							if (r < 0) r = 0;
 							if (g < 0) g = 0;
 
-							addLinePointColor(screenX, screenY, 0, 1, r, g, 0);
+							addLinePointColor(pose, consumer, (float) screenX, (float) screenY, 0, 1, r, g, 0);
 
 							currentX += p.horizontalDelta * (ElytraConfig.CONFIG.guiWidth.get() - 1) / ElytraConfig.CONFIG.guiGraphRealWidth.get();
 						}
 
-						endDrawLine();
+						endDrawLine(bufferSource);
 
-
-						beginDrawLine(0xFF000000);
-						addLinePoint(ElytraConfig.CONFIG.guiX.get(), ElytraConfig.CONFIG.guiY.get(), 0);
-						addLinePoint(ElytraConfig.CONFIG.guiX.get(), ElytraConfig.CONFIG.guiY.get() + ElytraConfig.CONFIG.guiHeight.get(), 0);
-						addLinePoint(ElytraConfig.CONFIG.guiX.get() + ElytraConfig.CONFIG.guiWidth.get(), ElytraConfig.CONFIG.guiY.get() + ElytraConfig.CONFIG.guiHeight.get(), 0);
-						addLinePoint(ElytraConfig.CONFIG.guiX.get() + ElytraConfig.CONFIG.guiWidth.get(), ElytraConfig.CONFIG.guiY.get(), 0);
-						addLinePoint(ElytraConfig.CONFIG.guiX.get(), ElytraConfig.CONFIG.guiY.get(), 0);
-						endDrawLine();
-
-
+						VertexConsumer consumer1 = beginDrawLine(bufferSource, 0xFF000000);
+						addLinePointColor(pose, consumer1, ElytraConfig.CONFIG.guiX.get(), ElytraConfig.CONFIG.guiY.get(), 0f, 1f,0f,0f, 0f);
+						addLinePointColor(pose, consumer1, ElytraConfig.CONFIG.guiX.get(), ElytraConfig.CONFIG.guiY.get() + ElytraConfig.CONFIG.guiHeight.get(), 0, 1f,0f,0f, 0f);
+						addLinePointColor(pose, consumer1, ElytraConfig.CONFIG.guiX.get() + ElytraConfig.CONFIG.guiWidth.get(), ElytraConfig.CONFIG.guiY.get() + ElytraConfig.CONFIG.guiHeight.get(), 0, 1f,0f,0f, 0f);
+						addLinePointColor(pose, consumer1, ElytraConfig.CONFIG.guiX.get() + ElytraConfig.CONFIG.guiWidth.get(), ElytraConfig.CONFIG.guiY.get(), 0, 1f,0f,0f, 0f);
+						addLinePointColor(pose, consumer1, ElytraConfig.CONFIG.guiX.get(), ElytraConfig.CONFIG.guiY.get(), 0, 1f,0f,0f, 0f);
+						endDrawLine(bufferSource);
 					}
+					pose.popPose();
 				}
 			}
 	}
 
-	private Tesselator tessellator_1;
-	private BufferBuilder bufferBuilder_1;
-	private void beginDrawLine(int color)
+	private VertexConsumer beginDrawLine(MultiBufferSource.BufferSource bufferSource, int color)
 	{
-		float float_1 = (float)(color >> 24 & 255) / 255.0F;
-		float float_2 = (float)(color >> 16 & 255) / 255.0F;
-		float float_3 = (float)(color >> 8 & 255) / 255.0F;
-		float float_4 = (float)(color & 255) / 255.0F;
 
-		tessellator_1 = Tesselator.getInstance();
-		bufferBuilder_1 = tessellator_1.getBuilder();
+
+		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 		RenderSystem.enableBlend();
-		RenderSystem.lineWidth(1.0F);
-		RenderSystem.setShaderColor(float_2, float_3, float_4, float_1);
-		bufferBuilder_1.begin(VertexFormat.Mode.DEBUG_LINE_STRIP, DefaultVertexFormat.POSITION);
+		return bufferSource.getBuffer(RenderType.debugLineStrip(1));
 	}
 
-	private void beginDrawLineColor()
+	private VertexConsumer beginDrawLineColor(MultiBufferSource bufferSource)
 	{
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
-		tessellator_1 = Tesselator.getInstance();
-		bufferBuilder_1 = tessellator_1.getBuilder();
 		RenderSystem.enableBlend();
-		RenderSystem.lineWidth(1.0F);
-		RenderSystem.setShaderFogColor(1,1,1,1);
-		bufferBuilder_1.begin(VertexFormat.Mode.DEBUG_LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
+		return bufferSource.getBuffer(RenderType.debugLineStrip(1));
 	}
 
-	private void addLinePoint(double x, double y, double z)
+	private void addLinePointColor(PoseStack poseStack, VertexConsumer consumer, float x, float y, float z, float a, float r, float g, float b)
 	{
-		bufferBuilder_1.vertex(x, y, z).endVertex();
+		consumer.vertex(poseStack.last().pose(), x, y, z).color(r,g,b,a).endVertex();
 	}
 
-	private void addLinePointColor(double x, double y, double z, float a, float r, float g, float b)
+	private void endDrawLine(MultiBufferSource.BufferSource source)
 	{
-		bufferBuilder_1.vertex(x, y, z).color(r,g,b,a).endVertex();
-	}
-
-	private void endDrawLine()
-	{
-		tessellator_1.end();
+		source.endLastBatch();
 		RenderSystem.disableBlend();
 	}
-
 }

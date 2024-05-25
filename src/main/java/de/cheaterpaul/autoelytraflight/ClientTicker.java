@@ -5,8 +5,8 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
-import net.neoforged.neoforge.event.TickEvent;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.LinkedList;
@@ -44,7 +44,7 @@ public class ClientTicker {
     }
 
     @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
+    public void onClientTick(ClientTickEvent.Pre event) {
         if (mc.player != null) {
 
             if (mc.player.isFallFlying())

@@ -21,27 +21,7 @@ apply from: 'gradle/versioning.gradle'
 apply from: 'gradle/artifacts.gradle'
 apply from: 'gradle/deploy.gradle'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-
-
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
-
-runs {
-    configureEach {
-        systemProperty 'forge.logging.markers', 'REGISTRIES'
-        systemProperty 'forge.logging.console.level', 'debug'
-
-        modSource project.sourceSets.main
-    }
-
-    client {
-        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-    }
-
-    server {
-        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-    }
-}
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
@@ -74,7 +54,7 @@ tasks.withType(ProcessResources).configureEach {
     ]
     inputs.properties replaceProperties
 
-    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+    filesMatching(['META-INF/neoforge.mods.toml', 'pack.mcmeta']) {
         expand replaceProperties + [project: project]
     }
 }
