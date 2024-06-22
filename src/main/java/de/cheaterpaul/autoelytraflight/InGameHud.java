@@ -2,6 +2,7 @@ package de.cheaterpaul.autoelytraflight;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.LayeredDraw;
@@ -20,7 +21,7 @@ public class InGameHud implements LayeredDraw.Layer {
 	public static void registerOverlay(RegisterGuiLayersEvent event) {
 		ClientTicker clientTicker = new ClientTicker();
 		NeoForge.EVENT_BUS.register(clientTicker);
-		event.registerAboveAll(new ResourceLocation("autoelytraflight","elytra-statistics"), new InGameHud(clientTicker));
+		event.registerAboveAll(ResourceLocation.fromNamespaceAndPath("autoelytraflight","elytra-statistics"), new InGameHud(clientTicker));
 	}
 
 	public InGameHud(ClientTicker ticker) {
@@ -29,7 +30,7 @@ public class InGameHud implements LayeredDraw.Layer {
 	}
 
 	@Override
-	public void render(GuiGraphics guiGraphics, float partialTicks) {
+	public void render(GuiGraphics guiGraphics, DeltaTracker delta) {
 			if (ticker.showHud) {
 
 				if (ticker.hudString != null) {
@@ -119,7 +120,7 @@ public class InGameHud implements LayeredDraw.Layer {
 
 	private void addLinePointColor(PoseStack poseStack, VertexConsumer consumer, float x, float y, float z, float a, float r, float g, float b)
 	{
-		consumer.vertex(poseStack.last().pose(), x, y, z).color(r,g,b,a).endVertex();
+		consumer.addVertex(poseStack.last().pose(), x, y, z).setColor(r,g,b,a);
 	}
 
 	private void endDrawLine(MultiBufferSource.BufferSource source)
